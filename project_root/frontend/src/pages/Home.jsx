@@ -1,12 +1,14 @@
 import { useState, useEffect } from "react";
 import api from "../api";
 import Post from "../components/Post"
+import { useNavigate } from "react-router-dom";
 import "../styles/Home.css"
 
 function Home() {
     const [posts, setPosts] = useState([]);
     const [content, setContent] = useState("");
     const [title, setTitle] = useState("");
+    const navigate = useNavigate();
 
     useEffect(() => {
         getPosts();
@@ -46,6 +48,15 @@ function Home() {
             .catch((err) => alert(err));
     };
 
+    const handleLogout = () => {
+    // If you store tokens in localStorage or cookies, remove them
+    localStorage.removeItem("access_token");
+    localStorage.removeItem("refresh_token");
+
+    // Redirect to Login page
+    navigate("/login");
+    };
+
     return (
         <div>
             <div>
@@ -77,6 +88,11 @@ function Home() {
                 ></textarea>
                 <br />
                 <input type="submit" value="Submit"></input>
+                <div style={{ textAlign: "right", margin: "1rem" }}>
+                <button onClick={handleLogout} style={{ padding: "0.5rem 1rem", cursor: "pointer" }}>
+                Logout
+                </button>
+                </div>
             </form>
         </div>
     );
